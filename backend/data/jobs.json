@@ -1,5 +1,17 @@
 [
   {
+    "id": 1773588754413,
+    "title": "clean my house",
+    "category": "plumbing",
+    "description": "We are seeking a reliable and detail-oriented house cleaner to maintain a tidy living environment. Responsibilities include dusting, vacuuming, mopping floors, cleaning bathrooms, kitchen surfaces, and organizing common areas. Additional tasks may involve laundry, window cleaning, and deep cleaning on a rotating schedule. Ideal candidates should have previous cleaning experience, excellent time management skills, and a commitment to using eco-friendly products. Flexibility in scheduling is preferred. If you take pride in creating a clean and welcoming home, we’d love to hear from you!",
+    "budget": "2000",
+    "location": "kingston",
+    "userId": 1773549102845,
+    "userEmail": "englandvictoria9@gmail.com",
+    "date": "15/03/2026",
+    "createdAt": "2026-03-15T15:32:34.462Z"
+  },
+  {
     "id": 1773555597400,
     "title": "Repair Short Circuit",
     "category": "electrical",
