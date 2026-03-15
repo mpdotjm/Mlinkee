@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Linkee</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 20 20 Q 32 12 44 20 Q 56 28 48 40 Q 40 52 28 48 Q 16 44 20 32 Q 24 20 20 20" 
+                              fill="none" stroke="#667eea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 24 24 Q 32 18 40 24 Q 48 30 42 38 Q 36 46 28 42 Q 20 38 24 32 Q 28 24 24 24" 
+                              fill="#ffffff" fill-opacity="0.1" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="32" cy="20" r="3" fill="#667eea"/>
+                        <circle cx="44" cy="32" r="3" fill="#764ba2"/>
+                        <circle cx="32" cy="44" r="3" fill="#f093fb"/>
+                        <circle cx="20" cy="32" r="3" fill="#667eea"/>
+                    </svg>
+                    <span>Linkee</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="post-job.html">Post Job</a></li>
+                    <li class="profile-nav-item" style="display:none;"><a href="profile.html" class="active">Profile</a></li>
+                    <li><a href="login.html" class="login-link">Login</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>My Profile</h1>
+            <p>Manage your account, upload a profile picture, and tell the community about yourself.</p>
+        </div>
+    </section>
+
+    <section class="main-content" data-protected>
+        <div class="container" style="max-width: 600px;">
+            <div id="profileProtection" style="display:none; text-align:center; padding: 4rem;">
+                <!-- Filled by script.js checkLoginStatus -->
+            </div>
+
+            <form id="profileForm" class="auth-form" style="display:none; background: #fff; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div id="profileImagePreview" style="width: 120px; height: 120px; border-radius: 50%; background: #f0f4f8; margin: 0 auto 1rem; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 3px solid #667eea;">
+                        <i class="fas fa-user" style="font-size: 3rem; color: #a0aec0;"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profilePicture">Update Profile Picture (Image)</label>
+                    <input type="file" id="profilePicture" accept="image/*" style="width:100%; padding:10px; border:2px solid #e0e0e0; border-radius:12px;">
+                </div>
+
+                <div class="form-group">
+                    <label for="profileDescription">Bio / Description</label>
+                    <textarea id="profileDescription" rows="5" placeholder="Tell us about yourself and your experience..." style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:12px; resize:vertical; font-family: inherit;"></textarea>
+                </div>
+                
+                <div id="profileMessage" style="display:none; text-align: center; margin-bottom: 1rem; border-radius: 8px; padding: 10px;"></div>
+
+                <button type="submit" id="saveProfileBtn" class="btn btn-primary full-width">Save Profile</button>
+                <button type="submit" id="saveProfileBtn" class="btn btn-primary full-width">Save Profile</button>
+            </form>
+
+            <!-- Provider Inbox Section -->
+            <div id="providerInboxSection" style="display:none; margin-top: 3rem;">
+                <h2 style="color:#333; margin-bottom:1.5rem; text-align:center;">My Inbox</h2>
+                <div id="inboxMessages" class="messages-container" style="display:flex; flex-direction:column; gap:15px;">
+                    <!-- Messages will be injected here via JS -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Linkee. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+
+    <!-- Send Message / Reply Modal -->
+    <div id="messageModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
+        <div class="modal-content" style="background-color:#fefefe; margin:10% auto; padding:2rem; border-radius: 12px; width:90%; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative;">
+            <span id="closeMessageModal" style="color:#aaa; position:absolute; top:15px; right:20px; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+            <h2 id="messageModalTitle" style="margin-top:0; color:#333;">Reply to Message</h2>
+            <form id="sendMessageForm">
+                <input type="hidden" id="messageReceiverId">
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label for="msgContent">Message Details</label>
+                    <textarea id="msgContent" rows="5" required placeholder="Type your reply here..." style="width:100%; padding:10px; border:2px solid #e0e0e0; border-radius:8px; resize:vertical; font-family:inherit;"></textarea>
+                </div>
+                <div id="messageStatus" style="display:none; text-align:center; padding:10px; margin-bottom:15px; border-radius:8px;"></div>
+                <button type="submit" id="sendMessageBtn" class="btn btn-primary" style="width:100%;">Send Message</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

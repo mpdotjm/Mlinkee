@@ -6,14 +6,23 @@
     <title>Services - Linkee</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
                 <div class="logo">
-                    <i class="fas fa-link"></i>
+                    <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 20 20 Q 32 12 44 20 Q 56 28 48 40 Q 40 52 28 48 Q 16 44 20 32 Q 24 20 20 20" 
+                              fill="none" stroke="#667eea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 24 24 Q 32 18 40 24 Q 48 30 42 38 Q 36 46 28 42 Q 20 38 24 32 Q 28 24 24 24" 
+                              fill="#ffffff" fill-opacity="0.1" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="32" cy="20" r="3" fill="#667eea"/>
+                        <circle cx="44" cy="32" r="3" fill="#764ba2"/>
+                        <circle cx="32" cy="44" r="3" fill="#f093fb"/>
+                        <circle cx="20" cy="32" r="3" fill="#667eea"/>
+                    </svg>
                     <span>Linkee</span>
                 </div>
                 <ul class="nav-menu">
@@ -21,6 +30,7 @@
                     <li><a href="services.html">Services</a></li>
                     <li><a href="jobs.html">Jobs</a></li>
                     <li><a href="post-job.html">Post Job</a></li>
+                    <li class="profile-nav-item" style="display:none;"><a href="profile.html">Profile</a></li>
                     <li><a href="login.html" class="login-link">Login</a></li>
                 </ul>
                 <div class="hamburger">
@@ -46,7 +56,9 @@
                     <option value="other">Other</option>
                 </select>
                 <button id="clearFilter"><i class="fas fa-times"></i></button>
+                <button class="btn-ai" id="aiSearchBtn" type="button" onclick="handleAISearch()">✨ AI Search</button>
             </div>
+            <div id="aiSearchResult" class="ai-search-suggestion" style="display:none;"></div>
             <div id="servicesGrid" class="services-grid">
                 <!-- JS populated -->
             </div>
@@ -60,5 +72,77 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        async function handleAISearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) { alert('Type a search query first!'); return; }
+
+            const btn = document.getElementById('aiSearchBtn');
+            const resultDiv = document.getElementById('aiSearchResult');
+            btn.disabled = true;
+            btn.textContent = '⏳ Thinking...';
+
+            try {
+                const res = await fetch('/api/ai/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = `
+                        <strong>✨ AI Suggestion:</strong> ${data.suggestion || 'No specific suggestion.'}
+                        ${data.matchedCategories && data.matchedCategories.length ? '<br><strong>Matching categories:</strong> ' + data.matchedCategories.join(', ') : ''}
+                    `;
+
+                    // Auto-filter by first matched category
+                    if (data.matchedCategories && data.matchedCategories.length) {
+                        const filter = document.getElementById('categoryFilter');
+                        const searchInput = document.getElementById('searchInput');
+                        const matched = data.matchedCategories[0].toLowerCase();
+                        if ([...filter.options].some(o => o.value === matched)) {
+                            filter.value = matched;
+                            
+                            // Clear exact text match so category filter works properly
+                            searchInput.value = '';
+                            
+                            // Trigger the filter event
+                            filter.dispatchEvent(new Event('change'));
+                        }
+                    }
+                } else {
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = '<strong>⚠️</strong> ' + (data.error || 'Could not process search.');
+                }
+            } catch (err) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<strong>⚠️</strong> Could not reach AI service.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✨ AI Search';
+            }
+        }
+        }
+    </script>
+    
+    <!-- Send Message Modal -->
+    <div id="messageModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
+        <div class="modal-content" style="background-color:#fefefe; margin:10% auto; padding:2rem; border-radius: 12px; width:90%; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative;">
+            <span id="closeMessageModal" style="color:#aaa; position:absolute; top:15px; right:20px; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+            <h2 id="messageModalTitle" style="margin-top:0; color:#333;">Contact Provider</h2>
+            <form id="sendMessageForm">
+                <input type="hidden" id="messageReceiverId">
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label for="msgContent">Message Details</label>
+                    <textarea id="msgContent" rows="5" required placeholder="Describe what you need help with..." style="width:100%; padding:10px; border:2px solid #e0e0e0; border-radius:8px; resize:vertical; font-family:inherit;"></textarea>
+                </div>
+                <div id="messageStatus" style="display:none; text-align:center; padding:10px; margin-bottom:15px; border-radius:8px;"></div>
+                <button type="submit" id="sendMessageBtn" class="btn btn-primary" style="width:100%;">Send Message</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

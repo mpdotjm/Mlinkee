@@ -1,0 +1,96 @@
+[
+  {
+    "id": 1773571735698,
+    "senderId": 1773571633940,
+    "receiverId": 1773571465502,
+    "senderName": "Anonymous",
+    "senderEmail": "jane2@example.com",
+    "content": "Yes, I can absolutely help with that. - Jane Two",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:48:55.698Z"
+  },
+  {
+    "id": 1773571667683,
+    "senderId": 1773571465502,
+    "receiverId": 1773571633940,
+    "senderName": "Anonymous",
+    "senderEmail": "c1@m.com",
+    "content": "Hello Jane Two, I need help with my plumbing. - Customer One",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:47:47.683Z"
+  },
+  {
+    "id": 1773571516629,
+    "senderId": 1773571465502,
+    "receiverId": 1773555561050,
+    "senderName": "Anonymous",
+    "senderEmail": "c1@m.com",
+    "content": "Hi Jane! Can you fix my sink? - Customer One",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:45:16.629Z"
+  },
+  {
+    "id": 1773571403385,
+    "senderId": 1773571317040,
+    "receiverId": 1773568702664,
+    "senderName": "Anonymous",
+    "senderEmail": "testcust@m.com",
+    "content": "Hi Jane! Can you fix my sink?",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:43:23.385Z"
+  },
+  {
+    "id": 1773570969304,
+    "receiverId": 1773568702664,
+    "senderName": "John Doe",
+    "senderEmail": "john@example.com",
+    "content": "Hi Jane! I have a leaking pipe that needs fixing ASAP. Can you help?",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:36:09.304Z"
+  },
+  {
+    "id": 1773570929259,
+    "receiverId": 1773568702664,
+    "senderName": "John Doe",
+    "senderEmail": "john@example.com",
+    "content": "Hi Jane, have a leaky faucet that needs to be fixed in ASAP. Can you help?",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:35:29.259Z"
+  },
+  {
+    "id": 1773570843237,
+    "receiverId": 1773568702664,
+    "senderName": "John Doe",
+    "senderEmail": "john@example.com",
+    "content": "Hi Jane! I have a leaking pipe that needs fixing ASAP. Can you help?",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:34:03.237Z"
+  },
+  {
+    "id": 1773570743196,
+    "receiverId": 1773570665589,
+    "senderName": "John Doe",
+    "senderEmail": "john@example.com",
+    "content": "Hi Jane Pro! This is a test message for the new provider.",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:32:23.196Z"
+  },
+  {
+    "id": 1773570736879,
+    "receiverId": 1773568702664,
+    "senderName": "John Doe",
+    "senderEmail": "john@example.com",
+    "content": "Hi Jane! I have a leaking pipe that needs fixing ASAP. Can you help?",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:32:16.879Z"
+  },
+  {
+    "id": 1773570505070,
+    "receiverId": 1773568702664,
+    "senderName": "John Doe",
+    "senderEmail": "john@example.com",
+    "content": "Hi Jane! I have a leaking pipe that needs fixing ASAP. Can you help?",
+    "isRead": false,
+    "createdAt": "2026-03-15T10:28:25.070Z"
+  }
+]

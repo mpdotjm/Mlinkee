@@ -6,14 +6,23 @@
     <title>Post Job - Linkee</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
                 <div class="logo">
-                    <i class="fas fa-link"></i>
+                    <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 20 20 Q 32 12 44 20 Q 56 28 48 40 Q 40 52 28 48 Q 16 44 20 32 Q 24 20 20 20" 
+                              fill="none" stroke="#667eea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 24 24 Q 32 18 40 24 Q 48 30 42 38 Q 36 46 28 42 Q 20 38 24 32 Q 28 24 24 24" 
+                              fill="#ffffff" fill-opacity="0.1" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="32" cy="20" r="3" fill="#667eea"/>
+                        <circle cx="44" cy="32" r="3" fill="#764ba2"/>
+                        <circle cx="32" cy="44" r="3" fill="#f093fb"/>
+                        <circle cx="20" cy="32" r="3" fill="#667eea"/>
+                    </svg>
                     <span>Linkee</span>
                 </div>
                 <ul class="nav-menu">
@@ -21,6 +30,7 @@
                     <li><a href="services.html">Services</a></li>
                     <li><a href="jobs.html">Jobs</a></li>
                     <li><a href="post-job.html">Post Job</a></li>
+                    <li class="profile-nav-item" style="display:none;"><a href="profile.html">Profile</a></li>
                     <li><a href="login.html" class="login-link">Login</a></li>
                 </ul>
                 <div class="hamburger">
@@ -55,8 +65,11 @@
                 </select>
                 </div>
                 <div class="form-group">
-                    <label for="jobDescription">Description</label>
-                    <textarea id="jobDescription" placeholder="Describe the job in detail..." required></textarea>
+                    <div class="form-group-ai">
+                        <label for="jobDescription">Description</label>
+                        <button type="button" class="btn-ai btn-ai-sm" id="aiGenJobDesc" onclick="generateJobDesc()">✨ AI Generate</button>
+                    </div>
+                    <textarea id="jobDescription" placeholder="Describe the job in detail... or click AI Generate!" required></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -83,5 +96,43 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        async function generateJobDesc() {
+            const title = document.getElementById('jobTitle').value;
+            const category = document.getElementById('jobCategory').value;
+            const descEl = document.getElementById('jobDescription');
+            const btn = document.getElementById('aiGenJobDesc');
+
+            if (!title) { alert('Enter a job title first!'); return; }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+
+            try {
+                const res = await fetch('/api/ai/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'job',
+                        title,
+                        category,
+                        currentDescription: descEl.value
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    descEl.value = data.description;
+                } else {
+                    alert(data.error || 'Failed to generate description');
+                }
+            } catch (err) {
+                alert('Could not reach AI service.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✨ AI Generate';
+            }
+        }
+    </script>
 </body>
 </html>

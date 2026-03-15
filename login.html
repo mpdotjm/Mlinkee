@@ -7,26 +7,30 @@
     <title>Login - Linkee</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body class="login-page">
     <div class="login-container">
         <div class="logo">
             <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 20 20 Q 32 12 44 20 Q 56 28 48 40 Q 40 52 28 48 Q 16 44 20 32 Q 24 20 20 20" fill="none"
-                    stroke="#667eea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                <circle cx="32" cy="20" r="3" fill="#667eea" />
-                <circle cx="44" cy="32" r="3" fill="#764ba2" />
-                <circle cx="32" cy="44" r="3" fill="#f093fb" />
-                <circle cx="20" cy="32" r="3" fill="#667eea" />
+                <path d="M 20 20 Q 32 12 44 20 Q 56 28 48 40 Q 40 52 28 48 Q 16 44 20 32 Q 24 20 20 20" 
+                      fill="none" stroke="#667eea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 24 24 Q 32 18 40 24 Q 48 30 42 38 Q 36 46 28 42 Q 20 38 24 32 Q 28 24 24 24" 
+                      fill="#ffffff" fill-opacity="0.1" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="32" cy="20" r="3" fill="#667eea"/>
+                <circle cx="44" cy="32" r="3" fill="#764ba2"/>
+                <circle cx="32" cy="44" r="3" fill="#f093fb"/>
+                <circle cx="20" cy="32" r="3" fill="#667eea"/>
             </svg>
             <span>Linkee</span>
         </div>
         <h1>Welcome</h1>
         <p>Connect with local service pros</p>
 
-        <form id="loginForm" class="auth-form"><!--hello world this is my first comment -->
+        <div id="authMessage" class="auth-message" style="display:none;"></div>
+
+        <form id="loginForm" class="auth-form">
             <div class="form-group">
                 <label for="loginEmail">Email</label>
                 <input type="email" id="loginEmail" placeholder="your@email.com" required>
@@ -35,7 +39,7 @@
                 <label for="loginPassword">Password</label>
                 <input type="password" id="loginPassword" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn btn-primary full-width">Login</button>
+            <button type="submit" id="loginBtn" class="btn btn-primary full-width">Login</button>
         </form>
 
         <div class="divider">
@@ -49,14 +53,47 @@
         <!-- Register Form (hidden initially) -->
         <form id="registerForm" class="auth-form hidden">
             <div class="form-group">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
                 <label for="registerEmail">Email</label>
                 <input type="email" id="registerEmail" placeholder="your@email.com" required>
             </div>
+            <div class="form-group" style="text-align: left;">
+                <label for="registerRole">Account Type</label>
+                <select id="registerRole" required style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:12px; margin-bottom:1rem;">
+                    <option value="customer">Customer (Looking for services)</option>
+                    <option value="provider">Service Provider (Offering services)</option>
+                </select>
+            </div>
+            <div class="form-group" id="providerCategoryGroup" style="text-align: left; display: none;">
+                <label for="registerCategory">Service Category</label>
+                <select id="registerCategory" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:12px; margin-bottom:1rem;">
+                    <option value="" disabled selected>Select your expertise...</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="carpentry">Carpentry</option>
+                    <option value="cleaning">Cleaning</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div id="providerCredentialsGroup" style="text-align: left; display: none; margin-bottom: 1rem; padding: 1rem; background: #f8faff; border-radius: 12px; border: 1px solid #cce0ff;">
+                <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 14px; color: #333;">Step 2: Credential Verification</h4>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label for="registerNationalId" style="font-size: 13px;">Upload National ID (Image)</label>
+                    <input type="file" id="registerNationalId" accept="image/*" style="font-size: 13px; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="registerCertificate" style="font-size: 13px;">Upload Professional Certificate (Image)</label>
+                    <input type="file" id="registerCertificate" accept="image/*" style="font-size: 13px; padding: 8px;">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="registerPassword">Password</label>
-                <input type="password" id="registerPassword" placeholder="••••••••" required>
+                <input type="password" id="registerPassword" placeholder="••••••••" required minlength="6">
             </div>
-            <button type="submit" class="btn btn-primary full-width">Create Account</button>
+            <button type="submit" id="registerBtn" class="btn btn-primary full-width">Create Account</button>
         </form>
 
         <div class="auth-links">
@@ -66,106 +103,225 @@
     </div>
 
     <script>
-        // Simple client-side auth
-        let users = JSON.parse(localStorage.getItem('linkeeUsers')) || [];
+        const API_BASE = '/api';
 
         document.addEventListener('DOMContentLoaded', function () {
             setupAuth();
             checkExistingLogin();
         });
 
+        function showMessage(text, isError = false) {
+            const msg = document.getElementById('authMessage');
+            msg.textContent = text;
+            msg.style.display = 'block';
+            msg.style.background = isError ? '#ffe0e0' : '#e0ffe0';
+            msg.style.color = isError ? '#c00' : '#070';
+            msg.style.padding = '10px 16px';
+            msg.style.borderRadius = '8px';
+            msg.style.marginBottom = '12px';
+            msg.style.fontSize = '14px';
+            msg.style.textAlign = 'center';
+        }
+
+        function setLoading(btn, loading) {
+            btn.disabled = loading;
+            btn.style.opacity = loading ? '0.7' : '1';
+        }
+
         function setupAuth() {
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
             const showRegister = document.getElementById('showRegister');
             const showLogin = document.getElementById('showLogin');
-            const goToHome = null;
 
             loginForm.addEventListener('submit', handleLogin);
             registerForm.addEventListener('submit', handleRegister);
             showRegister.addEventListener('click', showRegisterForm);
             showLogin.addEventListener('click', showLoginForm);
+
+            const roleSelect = document.getElementById('registerRole');
+            const categoryGroup = document.getElementById('providerCategoryGroup');
+            const credentialsGroup = document.getElementById('providerCredentialsGroup');
+            const categorySelect = document.getElementById('registerCategory');
+            const nationalId = document.getElementById('registerNationalId');
+            const certificate = document.getElementById('registerCertificate');
+
+            roleSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'provider') {
+                    categoryGroup.style.display = 'block';
+                    credentialsGroup.style.display = 'block';
+                    categorySelect.required = true;
+                    // For the sake of UX testing, we won't strictly "require" file uploads 
+                    // via HTML5 validation, but it's part of the flow.
+                } else {
+                    categoryGroup.style.display = 'none';
+                    credentialsGroup.style.display = 'none';
+                    categorySelect.required = false;
+                    nationalId.value = '';
+                    certificate.value = '';
+                }
+            });
         }
 
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address');
+                showMessage('Please enter a valid email address', true);
                 return;
             }
 
-            const user = users.find(u => u.email === email && u.password === password);
-            if (user) {
-                localStorage.setItem('linkeeCurrentUser', JSON.stringify({ id: user.id, email: user.email }));
-                alert('Login successful!');
-                window.location.href = 'index.html';
-            } else {
-                alert('Invalid email or password');
+            setLoading(btn, true);
+            try {
+                const res = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showMessage(data.error || 'Login failed', true);
+                    return;
+                }
+
+                // Save token and user info
+                localStorage.setItem('linkeeToken', data.token);
+                localStorage.setItem('linkeeCurrentUser', JSON.stringify(data.user));
+
+                showMessage('Login successful! Redirecting...');
+                setTimeout(() => { window.location.href = 'index.html'; }, 500);
+            } catch (err) {
+                showMessage('Could not connect to server. Is the backend running?', true);
+            } finally {
+                setLoading(btn, false);
             }
         }
 
-        function handleRegister(e) {
+        // Helper to convert file to Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) {
+                    resolve(null);
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleRegister(e) {
             e.preventDefault();
             const email = document.getElementById('registerEmail').value.trim().toLowerCase();
             const password = document.getElementById('registerPassword').value;
+            const name = document.getElementById('registerName').value.trim();
+            const role = document.getElementById('registerRole').value;
+            
+            let providerCategory = null;
+            let nationalIdBase64 = null;
+            let certificateBase64 = null;
+            
+            if (role === 'provider') {
+                providerCategory = document.getElementById('registerCategory').value;
+                const nationalIdFile = document.getElementById('registerNationalId').files[0];
+                const certificateFile = document.getElementById('registerCertificate').files[0];
+                
+                try {
+                    nationalIdBase64 = await fileToBase64(nationalIdFile);
+                    certificateBase64 = await fileToBase64(certificateFile);
+                } catch (err) {
+                    showMessage('Error processing credential files', true);
+                    return;
+                }
+            }
+            
+            const btn = document.getElementById('registerBtn');
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address');
+                showMessage('Please enter a valid email address', true);
                 return;
             }
 
-            if (users.find(u => u.email === email)) {
-                alert('User already exists');
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters', true);
                 return;
             }
 
-            const newUser = { id: Date.now(), email, password };
-            users.push(newUser);
-            localStorage.setItem('linkeeUsers', JSON.stringify(users));
-            localStorage.setItem('linkeeCurrentUser', JSON.stringify({ id: newUser.id, email: newUser.email }));
-            alert('Account created & logged in!');
-            window.location.href = 'index.html';
-        }
+            setLoading(btn, true);
+            try {
+                const res = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        name, email, password, role, providerCategory, 
+                        nationalId: nationalIdBase64, 
+                        certificate: certificateBase64 
+                    })
+                });
 
-        function handleGoogleLogin() {
-            // Fake Google login - in real app use OAuth
-            const googleUser = { id: 'google_' + Date.now(), email: 'user@google.com', name: 'Google User' };
-            localStorage.setItem('linkeeCurrentUser', JSON.stringify(googleUser));
-            window.location.href = 'index.html';
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showMessage(data.error || 'Registration failed', true);
+                    return;
+                }
+
+                // Save token and user info
+                localStorage.setItem('linkeeToken', data.token);
+                localStorage.setItem('linkeeCurrentUser', JSON.stringify(data.user));
+
+                showMessage('Account created! Redirecting...');
+                setTimeout(() => { window.location.href = 'index.html'; }, 500);
+            } catch (err) {
+                showMessage('Could not connect to server. Is the backend running?', true);
+            } finally {
+                setLoading(btn, false);
+            }
         }
 
         function showRegisterForm(e) {
             e.preventDefault();
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('authMessage').style.display = 'none';
         }
 
         function showLoginForm(e) {
             e.preventDefault();
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('authMessage').style.display = 'none';
         }
 
         function checkExistingLogin() {
+            const token = localStorage.getItem('linkeeToken');
             const currentUserStr = localStorage.getItem('linkeeCurrentUser');
-            if (!currentUserStr) return;
+            if (!token || !currentUserStr) return;
 
-            try {
-                const user = JSON.parse(currentUserStr);
-                if (user && user.email && typeof user.id === 'number') {
+            // Verify the token is still valid
+            fetch(`${API_BASE}/me`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(res => {
+                if (res.ok) {
                     window.location.href = 'index.html';
                 } else {
+                    // Token expired or invalid — clear and stay on login
+                    localStorage.removeItem('linkeeToken');
                     localStorage.removeItem('linkeeCurrentUser');
                 }
-            } catch (e) {
-                localStorage.removeItem('linkeeCurrentUser');
-                localStorage.removeItem('linkeeUsers');
-            }
+            })
+            .catch(() => {
+                // Server not reachable — allow login anyway if user has local data
+            });
         }
     </script>
 </body>
