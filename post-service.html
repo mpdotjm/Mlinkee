@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Service - Linkee</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 20 20 Q 32 12 44 20 Q 56 28 48 40 Q 40 52 28 48 Q 16 44 20 32 Q 24 20 20 20" 
+                              fill="none" stroke="#667eea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="32" cy="20" r="3" fill="#667eea"/>
+                        <circle cx="44" cy="32" r="3" fill="#764ba2"/>
+                        <circle cx="32" cy="44" r="3" fill="#f093fb"/>
+                        <circle cx="20" cy="32" r="3" fill="#667eea"/>
+                    </svg>
+                    <span>Linkee</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="post-job.html">Post Job</a></li>
+                    <li><a href="post-service.html">Post Service</a></li>
+                    <li><a href="login.html" class="login-link">Login</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="post-service">
+        <div class="container">
+            <h2>Post Your Service</h2>
+            <div id="serviceProtection">
+                <h3>Please <a href="login.html">login</a> to post services</h3>
+            </div>
+            <form id="serviceForm" style="display: none; max-width: 800px; margin: 0 auto 4rem;">
+                <div class="form-group">
+                    <label for="businessName">Business Name</label>
+                    <input type="text" id="businessName" placeholder="Your Business Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceCategory">Category</label>
+                    <select id="serviceCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="plumbing">Plumbing</option>
+                        <option value="electrical">Electrical</option>
+                        <option value="carpentry">Carpentry</option>
+                        <option value="cleaning">Cleaning</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="businessLocation">Business Location</label>
+                    <input type="text" id="businessLocation" placeholder="City/Area" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="businessEmail">Email</label>
+                        <input type="email" id="businessEmail" placeholder="business@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessPhone">Phone</label>
+                        <input type="tel" id="businessPhone" placeholder="(876) 123-4567" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDescription">Service Description</label>
+                    <textarea id="serviceDescription" rows="6" placeholder="Describe your services, experience, rates..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="servicesOffered">Services Offered</label>
+                    <textarea id="servicesOffered" rows="4" placeholder="e.g., Pipe repair, faucet installation, drain cleaning" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post Service</button>
+            </form>
+            <div id="postedServices" class="posted-jobs" style="display: none;">
+                <h3>Your Posted Services</h3>
+                <!-- User's services will show here -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Linkee. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

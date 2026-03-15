@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs - Linkee</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-link"></i>
+                    <span>Linkee</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="post-job.html">Post Job</a></li>
+                    <li><a href="login.html" class="login-link">Login</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="jobs page-section">
+        <div class="container">
+            <h2>Available Jobs</h2>
+            <div class="page-actions">
+                <a href="post-job.html" class="btn btn-primary">Post New Job</a>
+            </div>
+            <div id="allJobs" class="posted-jobs" style="min-height: 400px;">
+                <h3>Recent Jobs</h3>
+                <p id="noJobsMsg">No jobs posted yet. <a href="post-job.html">Post the first job!</a></p>
+                <!-- Jobs populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Linkee. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

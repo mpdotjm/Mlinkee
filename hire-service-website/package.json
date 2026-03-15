@@ -1,0 +1,15 @@
+{
+  "name": "hire-service-website",
+  "version": "1.0.0",
+  "description": "Hire local service professionals",
+  "scripts": {
+    "dev": "live-server --port=3000 --host=localhost",
+    "start": "live-server --port=3000 --host=localhost"
+  },
+  "devDependencies": {
+        "live-server": "^1.2.2"
+    },
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+  "frontend": "cd frontend && npm run dev",
+  "backend": "cd backend && npm start"
+}
